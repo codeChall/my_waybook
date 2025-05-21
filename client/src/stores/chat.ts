@@ -2,11 +2,11 @@ import { defineStore } from 'pinia'
 import { Socket } from "socket.io-client";
 import { io } from 'socket.io-client'
 import { ref } from 'vue'
-import MessageInterface from '../types/messageInterface';
+import MessageInterface from '../types/MessageInterface';
 
 export const useChatStore = defineStore('chat', () => {
   const socket = ref<Socket>();
-  const messages = ref<string[]>([])
+  const messages = ref<MessageInterface[]>([])
   const isConnected = ref<boolean>(false)
 
   // Подключение к серверу
@@ -23,7 +23,7 @@ export const useChatStore = defineStore('chat', () => {
   }
 
   // Отправка сообщения
-  const sendMessage = (text, user) => {
+  const sendMessage = (text: string, user: string) => {
     if (!isConnected.value) return
     
     const message: MessageInterface = {

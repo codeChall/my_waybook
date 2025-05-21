@@ -15,8 +15,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useChatStore } from './src/stores/chat'
-import { onMounted } from 'vue'
+import { useChatStore } from '../../../stores/chat'
+import { onMounted, ref } from 'vue'
 
 const store = useChatStore();
 const newMessage = ref('')

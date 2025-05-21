@@ -12,8 +12,7 @@
     "baseUrl": ".",
     "types": [
       "vue-router",
-      "vue",
-      "@types/socket.io-client"
+      "vue"
     ],
     "paths": { 
       "@": [".src/"] 
