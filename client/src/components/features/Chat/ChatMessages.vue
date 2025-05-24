@@ -2,7 +2,7 @@
   <main>
     <div class="messages">
       <div v-for="msg in store.messages" :key="msg.id">
-        [{{ msg.timestamp.toLocaleTimeString() }}]
+        [{{ msg.timestamp }}]
         {{ msg.user }}: {{ msg.text }}
       </div>
     </div>

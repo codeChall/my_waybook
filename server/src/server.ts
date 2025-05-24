@@ -15,9 +15,11 @@ io.on('connection', (socket) => {
   
   // Пример обработки сообщения
   socket.on('message:send', (msg) => {
+    console.log('User send msg:', msg)
     io.emit('message:new', msg)
   })
 
+  //Анжела красотка
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id)
   })
