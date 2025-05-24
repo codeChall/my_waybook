@@ -10,8 +10,14 @@
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
     "baseUrl": ".",
-    "paths": { "@": [".src/"] }
+    "types": [
+      "vue-router",
+      "vue"
+    ],
+    "paths": { 
+      "@": [".src/"] 
+    }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "shims-vue.d.ts"],
   "exclude": ["node_modules"]
 }
