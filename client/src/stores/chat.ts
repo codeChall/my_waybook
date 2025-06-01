@@ -1,55 +1,49 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 import { Socket } from "socket.io-client";
-import { io } from 'socket.io-client'
-import { ref } from 'vue'
+import { io } from 'socket.io-client';
+import { ref } from 'vue';
 import MessageInterface from '../types/MessageInterface';
 
-export const useChatStore = defineStore('chat', {
-  // const socket = ref<Socket>();
-  // const messages = ref<MessageInterface[]>([])
-  // const isConnected = ref<boolean>(false)
+export const useChatStore = defineStore('chat', () => {
+  const socket = ref<Socket>();
+  const messages = ref<MessageInterface[]>([]);
+  const isConnected = ref<boolean>(false);
 
-  state: () => ({
-      socket: {} as Socket,
-      messages: [] as MessageInterface[],
-      isConnected: false as Boolean,
-  }),
+  function connect() {
+    socket.value = io('http://localhost:3000');
 
-  actions: {
-    // Подключение к серверу
-    connect() {
-      this.socket = io('http://localhost:3000')
+    socket.value.on('connect', () => {
+      isConnected.value = true
+    })
 
-      this.socket.on('connect', () => {
-        this.isConnected = true
-      })
+    socket.value.on('message:new', (msg) => {
+      console.log(msg);
 
-      this.socket.on('message:new', (msg) => {
-        console.log(msg);
-        
-        this.messages.push(msg)
-        console.log(this.messages);
-      })
-    },
+      messages.value.push(msg)
+      console.log(messages.value);
+    })
+  };
 
-    // // Отправка сообщения
-    sendMessage(text: string, user: string) {
-      if (!this.isConnected) return
+  function sendMessage(text: string, user: string) {
+    if (!isConnected.value) return
 
-      const message: MessageInterface = {
-        id: Date.now(),
-        text,
-        user,
-        timestamp: new Date()
-      }
+    const message: MessageInterface = {
+      id: Date.now(),
+      text,
+      user,
+      timestamp: new Date()
+    };
 
-      this.socket?.emit('message:send', message)
-    }
-  },
-  persist: [
-    {
-      storage: localStorage
-    }
-  ]
+    socket.value?.emit('message:send', message);
+  }
 
-})
+  return {
+    messages,
+    connect,
+    sendMessage
+  }
+},
+  {
+    persist: true
+  }
+) 
