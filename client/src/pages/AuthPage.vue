@@ -1,0 +1,38 @@
+<template>
+  <div>
+    <h1>Sign Page</h1>
+        <input v-model="email" type="email" placeholder="Email" class="input" required />
+        <input v-model="password" type="password" placeholder="Password" class="input" required />
+        <button @click="submit">Sign Up</button>
+        <button @click="signInWithGoogle"> sign In With Google</button>
+  </div>
+</template>
+<script lang="ts" setup>
+import { ref } from 'vue';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+
+const email    = ref('');
+const password = ref('');
+
+const submit = () => {
+  signInWithEmailAndPassword(getAuth(), email.value, password.value)
+    .then(() => {
+      console.log('Successfully signed up!');
+    })
+    .catch((error) => {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert(String(error));
+      }
+    });
+};
+
+const signInWithGoogle = () => {
+
+};
+
+</script>
+
+<style scoped>
+</style>
