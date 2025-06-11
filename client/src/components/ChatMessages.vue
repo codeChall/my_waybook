@@ -18,21 +18,42 @@
 </template>
 
 <script lang="ts" setup>
-import { useChatStore } from '../../../stores/chat';
+import { useChatStore } from '../stores/chat';
 import { onMounted, ref } from 'vue';
 import { PaperAirplaneIcon } from '@heroicons/vue/24/outline';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { useRoute } from 'vue-router';
 
 const store = useChatStore();
 const newMessage = ref('');
-const currentUser = ref('Гость');
+const currentUser = ref();
+const roomId = ref('');
+const route = useRoute();
+
+const chatPartnerId = route.params.partnerId;
 
 onMounted(() => {
-  store.connect()
+  onAuthStateChanged(getAuth(), async (firebaseUser) => {
+     if (!firebaseUser || !chatPartnerId) return;
+
+      currentUser.value = firebaseUser;
+      const token = await firebaseUser.getIdToken();
+
+      roomId.value = [firebaseUser.uid, chatPartnerId].sort().join('_');
+
+      store.connect(token, roomId.value);
+  })
 })
 
 const handleSend = () => {
   if (newMessage.value.trim()) {
-    store.sendMessage(newMessage.value, currentUser.value);
+      const data = {
+    roomId: roomId.value,
+    message: newMessage.value,
+    senderId: currentUser.value.uid,
+    senderName: currentUser.value.displayName || currentUser.value.email,
+  };
+    store.sendMessage(data);
     newMessage.value = '';
   }
 }

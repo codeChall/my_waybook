@@ -9,8 +9,14 @@ export const useChatStore = defineStore('chat', () => {
   const messages = ref<MessageInterface[]>([]);
   const isConnected = ref<boolean>(false);
 
-  function connect() {
-    socket.value = io('http://localhost:3000');
+  function connect(token: string, roomId: string) {
+    socket.value = io('http://localhost:3000', {
+      auth: {
+        token
+      },
+    });
+    socket.value.emit('join-room', roomId);
+
 
     socket.value.on('connect', () => {
       isConnected.value = true
@@ -24,17 +30,17 @@ export const useChatStore = defineStore('chat', () => {
     })
   };
 
-  function sendMessage(text: string, user: string) {
+  function sendMessage(data: any) {
     if (!isConnected.value) return
 
-    const message: MessageInterface = {
-      id: Date.now(),
-      text,
-      user,
-      timestamp: new Date()
-    };
+    // const message: MessageInterface = {
+    //   id: Date.now(),
+    //   text,
+    //   user,
+    //   timestamp: new Date()
+    // };
 
-    socket.value?.emit('message:send', message);
+    socket.value?.emit('message:send', data);
   }
 
   return {

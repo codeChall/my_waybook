@@ -10,6 +10,9 @@
     <router-link to="/auth">
       <button class="">Auth</button>
     </router-link>
+    <router-link to="/user-list">
+      <button class="">User List</button>
+    </router-link>
     <button v-if="isLoggedIn" @click="handleSignOut">Sign Out</button>
 
   </div>
@@ -43,7 +46,7 @@ const handleSignOut = () => {
     .then(() => {
       console.log('Successfully signed out!');
     })
-    .catch((error) => {
+    .catch((error: { message: any; }) => {
       if (error instanceof Error) {
         alert(error.message);
       } else {
