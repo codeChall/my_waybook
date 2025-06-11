@@ -6,7 +6,7 @@ import { get } from "@vueuse/core";
 const routes = [
   { path: "/", name: "Home", component: HomeView },
   {
-    path: "/chat",
+    path: "/chat/:partnerId",
     name: "Chat",
     component: () => import("../pages/ChatPage.vue"),
     meta: { requiresAuth: true },
@@ -21,6 +21,11 @@ const routes = [
     name: "Auth",
     component: () => import("../pages/AuthPage.vue"),
   },
+  {
+    path: "/user-list",
+    name: "UserList",
+    component: () => import("../pages/UsersList.vue"),
+  },
 ];
 
 const router = createRouter({
@@ -33,6 +38,7 @@ const getCurrentUser = () => {
     const removeListener = onAuthStateChanged(
       getAuth(),
       (user) => {
+        console.log(user)
         removeListener();
         resolve(user);
       },

@@ -6,4 +6,5 @@
 .vscode/*
 !.vscode/extensions.json
 .idea
-
+**/serviceAccountKey.json
+**/firebaseConfig.json

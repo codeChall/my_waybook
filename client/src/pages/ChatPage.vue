@@ -5,7 +5,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import ChatMessages from '../components/features/Chat/ChatMessages.vue';
+import ChatMessages from '../components/ChatMessages.vue';
 
 </script>
 

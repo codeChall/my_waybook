@@ -9,7 +9,7 @@
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 const email    = ref('');
 const password = ref('');
@@ -28,8 +28,21 @@ const submit = () => {
     });
 };
 
-const signInWithGoogle = () => {
 
+const signInWithGoogle = () => {
+  const provider = new GoogleAuthProvider();
+  signInWithPopup(getAuth(), provider)
+    .then((result) => {
+      const user = result.user;
+      console.log('Successfully signed in with Google!', user);
+    })
+    .catch((error) => {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert(String(error));
+      }
+    });
 };
 
 </script>
