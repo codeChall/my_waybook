@@ -27,7 +27,7 @@ const isLoggedIn = ref(false);
 
 let auth: any;
 
-onMounted(() => {
+onMounted(async() => {
   auth = getAuth();
   onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -38,6 +38,9 @@ onMounted(() => {
       console.log('No user is logged in');
     }
   });
+   const govno = await fetch('http://localhost:5173/posts')
+  console.log(govno);
+  
 });
 
 

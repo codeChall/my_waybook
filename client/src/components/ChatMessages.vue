@@ -1,9 +1,8 @@
 <template>
   <main>
     <div class="messages">
-      <div class="messages__item" v-for="msg in store.messages" :key="msg.id">
-        [{{ msg.timestamp }}]
-        {{ msg.user }}: {{ msg.text }}
+      <div class="messages__item" v-for="msg in store.messages">
+        {{ msg.senderName }}: {{ msg.message }}
       </div>
     </div>
 
@@ -34,25 +33,25 @@ const chatPartnerId = route.params.partnerId;
 
 onMounted(() => {
   onAuthStateChanged(getAuth(), async (firebaseUser) => {
-     if (!firebaseUser || !chatPartnerId) return;
+    if (!firebaseUser || !chatPartnerId) return;
 
-      currentUser.value = firebaseUser;
-      const token = await firebaseUser.getIdToken();
+    currentUser.value = firebaseUser;
+    const token = await firebaseUser.getIdToken();
 
-      roomId.value = [firebaseUser.uid, chatPartnerId].sort().join('_');
+    roomId.value = [firebaseUser.uid, chatPartnerId].sort().join('_');
 
-      store.connect(token, roomId.value);
+    store.connect(token, roomId.value);
   })
 })
 
 const handleSend = () => {
   if (newMessage.value.trim()) {
-      const data = {
-    roomId: roomId.value,
-    message: newMessage.value,
-    senderId: currentUser.value.uid,
-    senderName: currentUser.value.displayName || currentUser.value.email,
-  };
+    const data = {
+      roomId: roomId.value,
+      message: newMessage.value,
+      senderId: currentUser.value.uid,
+      senderName: currentUser.value.displayName || currentUser.value.email,
+    };
     store.sendMessage(data);
     newMessage.value = '';
   }
